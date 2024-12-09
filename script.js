@@ -18,6 +18,42 @@ let trophyPlatform; // Die Plattform mit dem Pokal
 const gameHeight = gameContainer.clientHeight;
 const gameWidth = gameContainer.clientWidth;
 
+// Touch-Steuerung
+let touchStartX = 0;
+let touchEndX = 0;
+
+// Touchstart-Event (Startpunkt des Swipes speichern)
+gameContainer.addEventListener('touchstart', (event) => {
+    touchStartX = event.touches[0].clientX; // X-Koordinate des ersten Touches
+});
+
+// Touchend-Event (Richtung des Swipes berechnen)
+gameContainer.addEventListener('touchend', (event) => {
+    touchEndX = event.changedTouches[0].clientX; // X-Koordinate des letzten Touches
+    handleSwipe(); // Swipe verarbeiten
+});
+
+function handleSwipe() {
+    const swipeDistance = touchEndX - touchStartX; // Differenz der X-Koordinaten
+    const swipeThreshold = 50; // Mindest-Swipe-Länge, um als Wisch zu zählen
+
+    if (Math.abs(swipeDistance) > swipeThreshold) {
+        if (swipeDistance > 0) {
+            // Swipe nach rechts
+            positionX += 80; // Bewege nach rechts
+        } else {
+            // Swipe nach links
+            positionX -= 80; // Bewege nach links
+        }
+
+        // Beim Swipe immer springen
+        if (!isJumping) {
+            isJumping = true;
+            velocityY = -17; // Sprunggeschwindigkeit
+        }
+    }
+}
+
 // Plattformen dynamisch erstellen
 function createPlatforms() {
     const availableHeight = gameHeight - navigationHeight - 100; // Platz unter der Navigationsgrafik
