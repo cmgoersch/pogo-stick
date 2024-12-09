@@ -23,12 +23,18 @@ function createPlatforms() {
     const availableHeight = gameHeight - navigationHeight - 100; // Platz unter der Navigationsgrafik
     const stepHeight = availableHeight / (platformCount - 1); // Abstand zwischen Plattformen
 
+    const maxWidth = 400; // Maximale Breite des Plattformbereichs
+    const containerWidth = Math.min(maxWidth, gameWidth); // Begrenzen auf maxWidth oder Bildschirmbreite
+    const centerX = gameWidth / 2; // Bildschirmmitte
+    const platformWidth = 100; // Breite einer Plattform
+
     for (let i = 0; i < platformCount; i++) {
         const platform = document.createElement('div');
         platform.classList.add('platform');
 
         const verticalPosition = navigationHeight + 50 + i * stepHeight; // Position unterhalb der Navigationsgrafik
-        const horizontalPosition = Math.random() * (gameWidth - 100); // Zufällige Position in der Breite
+        const horizontalPosition =
+            centerX - containerWidth / 2 + Math.random() * (containerWidth - platformWidth); // Zufällige Position in der Breite (zentriert)
 
         platform.style.top = `${verticalPosition}px`;
         platform.style.left = `${horizontalPosition}px`;
@@ -166,5 +172,7 @@ function update() {
     requestAnimationFrame(update);
 }
 
+
 createPlatforms();
 update();
+
