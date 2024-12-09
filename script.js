@@ -6,6 +6,7 @@ let positionX = 200; // Startposition X
 let positionY = 200; // Startposition Y
 let velocityY = 0; // Vertikale Geschwindigkeit
 let isJumping = false;
+let bounceForce = -5; // Standard-Hüpfen
 
 function isOnPlatform() {
     // Prüfen, ob der Pogostick auf einer Plattform steht
@@ -37,7 +38,7 @@ document.addEventListener('keydown', (event) => {
         case 'ArrowUp':
             if (!isJumping) {
                 isJumping = true;
-                velocityY = -15; // Sprunggeschwindigkeit
+                velocityY = -17; // Höher springen bei Pfeiltaste
             }
             break;
     }
@@ -63,17 +64,17 @@ function update() {
 
     const platform = isOnPlatform();
     if (platform && velocityY > 0) {
-        // Wenn auf einer Plattform gelandet, anpassen
+        // Wenn auf einer Plattform gelandet, Standard-Bounce auslösen
         const platformRect = platform.getBoundingClientRect();
         positionY = platformRect.top - pogostick.offsetHeight + gameContainer.scrollTop;
-        velocityY = 0;
+        velocityY = bounceForce; // Leichtes Hüpfen
         isJumping = false;
     }
 
     // Boden erreichen
     if (positionY > gameContainer.clientHeight - pogostick.offsetHeight) {
         positionY = gameContainer.clientHeight - pogostick.offsetHeight;
-        velocityY = 0;
+        velocityY = bounceForce; // Leichtes Hüpfen am Boden
         isJumping = false;
     }
 
