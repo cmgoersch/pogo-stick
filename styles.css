@@ -1,0 +1,37 @@
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #87CEFA;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    
+}
+
+#game-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: #ADD8E6;
+}
+
+#pogostick {
+    position: absolute;
+    width: 80px;
+    height: auto;
+    transition: transform 0.1s; /* Für ein geschmeidigeres Springen */
+    z-index: 1;
+}
+
+.platform {
+    position: absolute;
+    width: 100px;
+    height: 10px;
+    background-color: #654321; /* Braune Plattform */
+    border-radius: 5px;
+    z-index: 0;
+}
