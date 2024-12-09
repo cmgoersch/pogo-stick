@@ -20,25 +20,40 @@ const gameWidth = gameContainer.clientWidth;
 
 // Touch-Steuerung
 let touchStartX = 0;
+let touchStartY = 0;
 let touchEndX = 0;
+let touchEndY = 0;
 
 // Touchstart-Event (Startpunkt des Swipes speichern)
 gameContainer.addEventListener('touchstart', (event) => {
     touchStartX = event.touches[0].clientX; // X-Koordinate des ersten Touches
+    touchStartY = event.touches[0].clientY; // Y-Koordinate des ersten Touches
 });
 
-// Touchend-Event (Richtung des Swipes berechnen)
+// Touchend-Event (Endpunkt des Swipes speichern)
 gameContainer.addEventListener('touchend', (event) => {
     touchEndX = event.changedTouches[0].clientX; // X-Koordinate des letzten Touches
+    touchEndY = event.changedTouches[0].clientY; // Y-Koordinate des letzten Touches
     handleSwipe(); // Swipe verarbeiten
 });
 
 function handleSwipe() {
-    const swipeDistance = touchEndX - touchStartX; // Differenz der X-Koordinaten
+    const swipeDistanceX = touchEndX - touchStartX; // Differenz der X-Koordinaten
+    const swipeDistanceY = touchEndY - touchStartY; // Differenz der Y-Koordinaten
     const swipeThreshold = 50; // Mindest-Swipe-Länge, um als Wisch zu zählen
 
-    if (Math.abs(swipeDistance) > swipeThreshold) {
-        if (swipeDistance > 0) {
+    if (Math.abs(swipeDistanceY) > swipeThreshold && Math.abs(swipeDistanceY) > Math.abs(swipeDistanceX)) {
+        // Vertikaler Swipe (nach oben oder unten)
+        if (swipeDistanceY < 0) {
+            // Swipe nach oben
+            if (!isJumping) {
+                isJumping = true;
+                velocityY = -17; // Sprunggeschwindigkeit
+            }
+        }
+    } else if (Math.abs(swipeDistanceX) > swipeThreshold) {
+        // Horizontaler Swipe (nach links oder rechts)
+        if (swipeDistanceX > 0) {
             // Swipe nach rechts
             positionX += 80; // Bewege nach rechts
         } else {
@@ -46,7 +61,7 @@ function handleSwipe() {
             positionX -= 80; // Bewege nach links
         }
 
-        // Beim Swipe immer springen
+        // Beim horizontalen Swipe immer springen
         if (!isJumping) {
             isJumping = true;
             velocityY = -17; // Sprunggeschwindigkeit
